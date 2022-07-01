@@ -50,6 +50,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: calc(100vmin / 8);
-    height: calc(100vmin / 8);
+    width: calc((100vmin / 8) - 3px);
+    height: calc((100vmin / 8) - 3px);
 }

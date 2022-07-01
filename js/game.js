@@ -165,8 +165,6 @@ class Board {
         this.ifSelected = false
         this.selectedCell = [10, 10]
         this.dotsList = []
-        this.dotsList.push(13)
-        this.dotsList.push(14)
         
     }
 
@@ -175,8 +173,13 @@ class Board {
     }
 }
 
+// Turn i, j into a number (e.g. 1, 3 --> 13)
+function posToValue(i, j) {
+    return parseInt(i * 10) + parseInt(j)
+}
+
+// Update piece images
 function updateImages(cBoard) {
-    // Update piece images
     for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j++) {
 
@@ -195,7 +198,7 @@ function updateImages(cBoard) {
             }
 
             // Add dots onto display board from chessBoard.dotsList
-            var posVar = i * 10 + j
+            var posVar = posToValue(i, j)
             if (cBoard.dotsList.includes(posVar)) { // Exists in list
                 var displayCell = document.getElementById(`${i}_${j}`)
             
@@ -209,11 +212,108 @@ function updateImages(cBoard) {
 }
 
 function calcMoves(i, j) {
+    console.log(`Calculating move ${i} ${j}`)
     var pieceObj = chessBoard.board[i][j]
     
-//     if (pieceObj instanceof Rook) {
+    // Rook move logic
+    if (pieceObj instanceof Rook) {
+        // Check horizontal
+        var horizontalLine = chessBoard.board[i]
+		var leftCan = 0
+		var rightCan = 7
 
-//     }
+        for (var left = 0; left < j; left++){   // check left
+			// If empty, just go to next spot
+			if (horizontalLine[left] instanceof Empty == true) {
+				continue
+			}
+
+			// Not empty, so check if same side
+			var obstaclePiece = chessBoard.board[i][left]
+			if (obstaclePiece.side != pieceObj.side) {	// Not same side
+				leftCan = left
+			}
+			else {	// Same side
+				leftCan = left + 1
+			}
+        }
+
+		for (var right = 7; right > j; right--) {	// check right
+			console.log(right)
+			// If empty, just go to next spot
+			if (horizontalLine[right] instanceof Empty == true) {
+				continue
+			}
+
+			// Not empty, so check if same side
+			var obstaclePiece = chessBoard.board[i][right]
+			if (obstaclePiece.side != pieceObj.side) {	// Not same side
+				rightCan = right
+			}
+			else {	// Same side
+				rightCan = right - 1
+			}
+		}
+
+		// Add dots to board (horizontal)
+		for (var horiScan = leftCan; horiScan < rightCan + 1; horiScan++) {
+			if (horiScan != j) {
+				posVar = posToValue(i, horiScan)
+				chessBoard.dotsList.push(posVar)
+			}
+		}
+
+		// Check Vertical
+        var verticalLine = []
+		for (var row = 0; row < 8; row++) {
+			verticalLine.push(chessBoard.board[row][j])
+		}
+		var upCan = 0
+		var downCan = 7
+
+        for (var up = 0; up < i; up++){   // check up
+			// If empty, just go to next spot
+			if (verticalLine[up] instanceof Empty == true) {
+				continue
+			}
+
+			// Not empty, so check if same side
+			var obstaclePiece = chessBoard.board[up][j]
+			if (obstaclePiece.side != pieceObj.side) {	// Not same side
+				upCan = up
+			}
+			else {	// Same side
+				upCan = up + 1
+			}
+        }
+
+		for (var down = 7; down > i; down--) {	// check down
+			// If empty, just go to next spot
+			if (verticalLine[down] instanceof Empty == true) {
+				continue
+			}
+
+			// Not empty, so check if same side
+			var obstaclePiece = chessBoard.board[down][j]
+			if (obstaclePiece.side != pieceObj.side) {	// Not same side
+				downCan = down
+			}
+			else {	// Same side
+				downCan = down - 1
+			}
+		}
+
+		// console.log(`upcan:${upCan} downcan:${downCan}`)
+		// console.log(verticalLine)
+
+		// Add dots to board (vertical)
+		for (var vertScan = upCan; vertScan < downCan + 1; vertScan++) {
+			if (vertScan != i) {
+				posVar = posToValue(vertScan, j)
+				chessBoard.dotsList.push(posVar)
+			}
+		}
+    }
 }
 
 function clickedCell(cellID, chess) {
@@ -233,6 +333,7 @@ function clickedCell(cellID, chess) {
             chess.ifSelected = false
 
             document.getElementById(`${i}_${j}`).classList.remove('highlighted')
+            chess.dotsList = []
         }
         else if (chessBoard.board[old_i][old_j].side == chess.board[i][j].side) {  // alert if both piece on the same side
 
@@ -256,8 +357,7 @@ function clickedCell(cellID, chess) {
             chess.ifSelected = false
 
             document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
-
-            
+            chess.dotsList = []
         }
     }
     else if (chess.board[i][j] instanceof Empty == false) {  // Highlight cell
