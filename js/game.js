@@ -211,108 +211,113 @@ function updateImages(cBoard) {
     }
 }
 
+function checkStraight(i, j, pieceObj) {
+	// Check horizontal
+	var horizontalLine = chessBoard.board[i]
+	var leftCan = 0
+	var rightCan = 7
+
+	for (var left = 0; left < j; left++){   // check left
+		// If empty, just go to next spot
+		if (horizontalLine[left] instanceof Empty == true) {
+			continue
+		}
+
+		// Not empty, so check if same side
+		var obstaclePiece = chessBoard.board[i][left]
+		if (obstaclePiece.side != pieceObj.side) {	// Not same side
+			leftCan = left
+		}
+		else {	// Same side
+			leftCan = left + 1
+		}
+	}
+
+	for (var right = 7; right > j; right--) {	// check right
+		console.log(right)
+		// If empty, just go to next spot
+		if (horizontalLine[right] instanceof Empty == true) {
+			continue
+		}
+
+		// Not empty, so check if same side
+		var obstaclePiece = chessBoard.board[i][right]
+		if (obstaclePiece.side != pieceObj.side) {	// Not same side
+			rightCan = right
+		}
+		else {	// Same side
+			rightCan = right - 1
+		}
+	}
+
+	// Add dots to board (horizontal)
+	for (var horiScan = leftCan; horiScan < rightCan + 1; horiScan++) {
+		if (horiScan != j) {
+			posVar = posToValue(i, horiScan)
+			chessBoard.dotsList.push(posVar)
+		}
+	}
+
+	// Check Vertical
+	var verticalLine = []
+	for (var row = 0; row < 8; row++) {
+		verticalLine.push(chessBoard.board[row][j])
+	}
+	var upCan = 0
+	var downCan = 7
+
+	for (var up = 0; up < i; up++){   // check up
+		// If empty, just go to next spot
+		if (verticalLine[up] instanceof Empty == true) {
+			continue
+		}
+
+		// Not empty, so check if same side
+		var obstaclePiece = chessBoard.board[up][j]
+		if (obstaclePiece.side != pieceObj.side) {	// Not same side
+			upCan = up
+		}
+		else {	// Same side
+			upCan = up + 1
+		}
+	}
+
+	for (var down = 7; down > i; down--) {	// check down
+		// If empty, just go to next spot
+		if (verticalLine[down] instanceof Empty == true) {
+			continue
+		}
+
+		// Not empty, so check if same side
+		var obstaclePiece = chessBoard.board[down][j]
+		if (obstaclePiece.side != pieceObj.side) {	// Not same side
+			downCan = down
+		}
+		else {	// Same side
+			downCan = down - 1
+		}
+	}
+
+	// console.log(`upcan:${upCan} downcan:${downCan}`)
+	// console.log(verticalLine)
+
+	// Add dots to board (vertical)
+	for (var vertScan = upCan; vertScan < downCan + 1; vertScan++) {
+		if (vertScan != i) {
+			posVar = posToValue(vertScan, j)
+			chessBoard.dotsList.push(posVar)
+		}
+	}
+
+}
+
 function calcMoves(i, j) {
     console.log(`Calculating move ${i} ${j}`)
     var pieceObj = chessBoard.board[i][j]
     
     // Rook move logic
     if (pieceObj instanceof Rook) {
-        // Check horizontal
-        var horizontalLine = chessBoard.board[i]
-		var leftCan = 0
-		var rightCan = 7
-
-        for (var left = 0; left < j; left++){   // check left
-			// If empty, just go to next spot
-			if (horizontalLine[left] instanceof Empty == true) {
-				continue
-			}
-
-			// Not empty, so check if same side
-			var obstaclePiece = chessBoard.board[i][left]
-			if (obstaclePiece.side != pieceObj.side) {	// Not same side
-				leftCan = left
-			}
-			else {	// Same side
-				leftCan = left + 1
-			}
-        }
-
-		for (var right = 7; right > j; right--) {	// check right
-			console.log(right)
-			// If empty, just go to next spot
-			if (horizontalLine[right] instanceof Empty == true) {
-				continue
-			}
-
-			// Not empty, so check if same side
-			var obstaclePiece = chessBoard.board[i][right]
-			if (obstaclePiece.side != pieceObj.side) {	// Not same side
-				rightCan = right
-			}
-			else {	// Same side
-				rightCan = right - 1
-			}
-		}
-
-		// Add dots to board (horizontal)
-		for (var horiScan = leftCan; horiScan < rightCan + 1; horiScan++) {
-			if (horiScan != j) {
-				posVar = posToValue(i, horiScan)
-				chessBoard.dotsList.push(posVar)
-			}
-		}
-
-		// Check Vertical
-        var verticalLine = []
-		for (var row = 0; row < 8; row++) {
-			verticalLine.push(chessBoard.board[row][j])
-		}
-		var upCan = 0
-		var downCan = 7
-
-        for (var up = 0; up < i; up++){   // check up
-			// If empty, just go to next spot
-			if (verticalLine[up] instanceof Empty == true) {
-				continue
-			}
-
-			// Not empty, so check if same side
-			var obstaclePiece = chessBoard.board[up][j]
-			if (obstaclePiece.side != pieceObj.side) {	// Not same side
-				upCan = up
-			}
-			else {	// Same side
-				upCan = up + 1
-			}
-        }
-
-		for (var down = 7; down > i; down--) {	// check down
-			// If empty, just go to next spot
-			if (verticalLine[down] instanceof Empty == true) {
-				continue
-			}
-
-			// Not empty, so check if same side
-			var obstaclePiece = chessBoard.board[down][j]
-			if (obstaclePiece.side != pieceObj.side) {	// Not same side
-				downCan = down
-			}
-			else {	// Same side
-				downCan = down - 1
-			}
-		}
-
-		// console.log(`upcan:${upCan} downcan:${downCan}`)
-		// console.log(verticalLine)
-
-		// Add dots to board (vertical)
-		for (var vertScan = upCan; vertScan < downCan + 1; vertScan++) {
-			if (vertScan != i) {
-				posVar = posToValue(vertScan, j)
-				chessBoard.dotsList.push(posVar)
-			}
-		}
+		checkStraight(i, j, pieceObj)
     }
 }
 
