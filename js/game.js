@@ -211,6 +211,34 @@ function updateImages(cBoard) {
     }
 }
 
+function checkDirection(i, j, pieceObj, change_i, change_j) {
+	var new_i = parseInt(i) + parseInt(change_i)
+	var new_j = parseInt(j) + parseInt(change_j)
+	console.log(`new i : ${new_i} new j : ${new_j}`)
+	// Stop recursion when out of bound
+	if (new_i < 0 || new_i > 7 || new_j < 0 || new_j > 7) {
+		return true
+	}
+
+	// Check obstacle piece
+	var obstaclePiece = chessBoard.board[new_i][new_j]
+	if (obstaclePiece instanceof Empty) {	// If empty
+		posVar = posToValue(new_i, new_j)
+		chessBoard.dotsList.push(posVar)
+		checkDirection(new_i, new_j, pieceObj, change_i, change_j)
+	}
+
+	// Not empty, so check if same side
+	if (obstaclePiece.side != pieceObj.side) {	// Not same side
+		posVar = posToValue(new_i, new_j)
+		chessBoard.dotsList.push(posVar)
+		return true
+	}
+	else {	// Same side
+		return true
+	}
+}
+
 function checkStraight(i, j, pieceObj) {
 	// Check horizontal
 	var horizontalLine = chessBoard.board[i]
@@ -219,7 +247,7 @@ function checkStraight(i, j, pieceObj) {
 
 	for (var left = 0; left < j; left++){   // check left
 		// If empty, just go to next spot
-		if (horizontalLine[left] instanceof Empty == true) {
+		if (horizontalLine[left] instanceof Empty) {
 			continue
 		}
 
@@ -236,7 +264,7 @@ function checkStraight(i, j, pieceObj) {
 	for (var right = 7; right > j; right--) {	// check right
 		console.log(right)
 		// If empty, just go to next spot
-		if (horizontalLine[right] instanceof Empty == true) {
+		if (horizontalLine[right] instanceof Empty) {
 			continue
 		}
 
@@ -311,6 +339,13 @@ function checkStraight(i, j, pieceObj) {
 
 }
 
+function checkDiagonal(i, j, pieceObj) {
+	checkDirection(i, j, pieceObj, -1, -1) // Check left up
+	checkDirection(i, j, pieceObj, -1, +1) // Check right up
+	checkDirection(i, j, pieceObj, +1, -1) // Check left down
+	checkDirection(i, j, pieceObj, +1, +1) // Check right down
+}
+
 function calcMoves(i, j) {
     console.log(`Calculating move ${i} ${j}`)
     var pieceObj = chessBoard.board[i][j]
@@ -319,6 +354,15 @@ function calcMoves(i, j) {
     if (pieceObj instanceof Rook) {
 		checkStraight(i, j, pieceObj)
     }
+	// Bishop move logic
+	if (pieceObj instanceof Bishop) {
+		checkDiagonal(i, j, pieceObj)
+	}
+	// Queen move logic
+	if (pieceObj instanceof Queen) {
+		checkStraight(i, j, pieceObj)
+		checkDiagonal(i, j, pieceObj)
+	}
 }
 
 function clickedCell(cellID, chess) {
