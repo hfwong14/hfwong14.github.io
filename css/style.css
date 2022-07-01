@@ -24,8 +24,9 @@ body {
 }
 
 .cellBlock {
-    display:table-cell;
+    display: table-cell;
     text-align: center;
+    position: relative;
 }
 
 .grayBlock {
@@ -43,4 +44,12 @@ body {
     margin-top: 10%;
     width: 75%;
     height: 75%;
+}
+
+.dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100vmin / 8);
+    height: calc(100vmin / 8);
 }

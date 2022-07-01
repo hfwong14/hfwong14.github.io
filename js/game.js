@@ -5,7 +5,7 @@ var ifHighlighted = false
 
 
 class Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         this.side = ifWhite // true if white, false if black
     }
 }
@@ -21,12 +21,12 @@ class Empty{
 }
 
 class Pawn extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "Pawn"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_pawn.png"
         }
         else {
@@ -36,12 +36,12 @@ class Pawn extends Piece {
 }
 
 class Rook extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "Rook"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_rook.png"
         }
         else {
@@ -51,12 +51,12 @@ class Rook extends Piece {
 }
 
 class Knight extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "Knight"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_knight.png"
         }
         else {
@@ -66,12 +66,12 @@ class Knight extends Piece {
 }
 
 class Bishop extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "Bishop"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_bishop.png"
         }
         else {
@@ -81,12 +81,12 @@ class Bishop extends Piece {
 }
 
 class Queen extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "Queen"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_queen.png"
         }
         else {
@@ -96,12 +96,12 @@ class Queen extends Piece {
 }
 
 class King extends Piece {
-    constructor(ifWhite){
+    constructor(ifWhite) {
         super(ifWhite)
 
         this.name = "King"
 
-        if (ifWhite){
+        if (ifWhite) {
             this.imgSrc = "./img/w_king.png"
         }
         else {
@@ -116,13 +116,13 @@ class Board {
         // Initiate Board
         this.board = new Array(8)
 
-        for (var i = 0; i < 8; i++){
+        for (var i = 0; i < 8; i++) {
             this.board[i] = new Array(8)
         }
     
         // set default
-        for (var i = 0; i < 8; i++){
-            for (var j = 0; j < 8; j++){
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
                 this.board[i][j] = new Empty()
             }
         }
@@ -141,12 +141,12 @@ class Board {
         this.board[0][6] = new Knight(false)
         this.board[0][7] = new Rook(false)
     
-        for (var j = 0; j < 8; j++){
+        for (var j = 0; j < 8; j++) {
             this.board[1][j] = new Pawn(false)
         }
     
         // white pieces
-        for (var j = 0; j < 8; j++){
+        for (var j = 0; j < 8; j++) {
             this.board[6][j] = new Pawn(true)
         }
     
@@ -164,6 +164,9 @@ class Board {
         // Board Variables
         this.ifSelected = false
         this.selectedCell = [10, 10]
+        this.dotsList = []
+        this.dotsList.push(13)
+        this.dotsList.push(14)
         
     }
 
@@ -172,44 +175,48 @@ class Board {
     }
 }
 
-function updateImage(board){
+function updateImages(cBoard) {
     // Update piece images
-    for (var i = 0; i < 8; i++){
-        for (var j = 0; j < 8; j++){
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
 
             var tempCell = document.getElementById(i + "_" + j)
-            if (tempCell.hasChildNodes()){  // remove previous text
+            while (tempCell.firstChild){    // remove all old nodes
+                // console.log(tempCell.firstChild)
                 tempCell.removeChild(tempCell.firstChild)
             }
 
-            if (chessBoard.board[i][j].name != "None"){
+            // Add pieces images onto display board
+            if (cBoard.board[i][j].name != "None") {
                 var tempImg = document.createElement('img')
-                tempImg.src = chessBoard.board[i][j].imgSrc
+                tempImg.src = cBoard.board[i][j].imgSrc
                 tempImg.classList.add('pieceImg')
                 document.getElementById(`${i}_${j}`).appendChild(tempImg)
             }
-        }
-    }
-}
 
-function updateBoard(board){
-    // update state of the gameBoard div
-    for (var i = 0; i < 8; i++){
-        for (var j = 0; j < 8; j++){
-            var tempCell = document.getElementById(i + "_" + j)
-            var textNode = document.createTextNode(board[i][j])
-
-            if (tempCell.hasChildNodes()){  // remove previous text
-                tempCell.removeChild(tempCell.firstChild)
+            // Add dots onto display board from chessBoard.dotsList
+            var posVar = i * 10 + j
+            if (cBoard.dotsList.includes(posVar)) { // Exists in list
+                var displayCell = document.getElementById(`${i}_${j}`)
+            
+                var dotElement = document.createElement('img')
+                dotElement.src = "./img/dot.png"
+                dotElement.classList.add('dot')
+                displayCell.appendChild(dotElement)
             }
-
-            // tempCell.appendChild(textNode)
         }
     }
-    
 }
 
-function clickedCell(cellID, chess){
+function calcMoves(i, j) {
+    var pieceObj = chessBoard.board[i][j]
+    
+//     if (pieceObj instanceof Rook) {
+
+//     }
+}
+
+function clickedCell(cellID, chess) {
     var i = cellID.split('_')[0]
     var j = cellID.split('_')[1]
     var coords = [i, j]
@@ -220,26 +227,28 @@ function clickedCell(cellID, chess){
     console.log(`Clicked Cell ID: ${i} ${j}`)
     // console.log(`Highlighted Cell: ${currentHighlightedCell[0]} ${currentHighlightedCell[1]}`)
 
-    if (chess.ifSelected){     // Previously highlighted
-        if (coords[0] == chess.selectedCell[0] && coords[1] == chess.selectedCell[1]){    // turn off highlight
+    if (chess.ifSelected) {     // Previously highlighted
+        if (coords[0] == chess.selectedCell[0] && coords[1] == chess.selectedCell[1]) {    // turn off highlight
             chess.selectedCell = [10, 10]
             chess.ifSelected = false
 
             document.getElementById(`${i}_${j}`).classList.remove('highlighted')
         }
-        else if (chessBoard.board[old_i][old_j].side == chess.board[i][j].side){  // both piece on the same side
-            chess.selectedCell = [10, 10]
-            chess.ifSelected = false
-
-            document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
+        else if (chessBoard.board[old_i][old_j].side == chess.board[i][j].side) {  // alert if both piece on the same side
 
             console.log("Cannot eat same side")
             alert("Cannot eat same side")
+
+            // OLD CODE TO REMOVE HIGHLIGHT WHEN TRYING TO EAT SAME SIDE
+            // chess.selectedCell = [10, 10]
+            // chess.ifSelected = false
+            // document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
         }
         else {  // move piece if not same side
             var old_i = chess.selectedCell[0]
             var old_j = chess.selectedCell[1]
 
+            const replacedPiece = chess.board[i][j] // For win checking (not implemented yet)
             chess.board[i][j] = chess.board[old_i][old_j]
             chess.board[old_i][old_j] = new Empty()
 
@@ -247,41 +256,47 @@ function clickedCell(cellID, chess){
             chess.ifSelected = false
 
             document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
+
+            
         }
     }
-    else if (chess.board[i][j] instanceof Empty == false){
+    else if (chess.board[i][j] instanceof Empty == false) {  // Highlight cell
         console.log(`Selected ${i} ${j}`)
         chess.selectedCell = coords
         chess.ifSelected = true
 
-        document.getElementById(`${i}_${j}`).classList.add('highlighted')
+        var displayCell = document.getElementById(`${i}_${j}`)
+        displayCell.classList.add('highlighted')
+
+        // Calculate possible moves and add dots
+        calcMoves(i, j)
     }
 
-    updateImage(chess.getBoard())
+    updateImages(chess)
 }
 
 let chessBoard = new Board()
 
-function startUP(){
+function startUP() {
     var gameBoard = document.getElementById("gameBoard")
 
     console.log(chessBoard.getBoard())
 
-    for (var i = 0; i < 8; i++){
-        for (var j = 0; j < 8; j++){
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
             var tempElement = document.createElement("div")
             tempElement.style.border = "thin solid"
             tempElement.id = i + "_" + j
             tempElement.classList.add('cellBlock')
-            if ((i + j) % 2 == 1){
+            if ((i + j) % 2 == 1) {
                 tempElement.classList.add('grayBlock')
             }
-            tempElement.addEventListener('click', function(){clickedCell(this.id, chessBoard), false})
+            tempElement.addEventListener('click', function() {clickedCell(this.id, chessBoard), false})
             gameBoard.appendChild(tempElement)
         }
     }
 
-    updateImage(chessBoard.getBoard())
+    updateImages(chessBoard)
 
 }
 
