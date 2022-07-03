@@ -211,7 +211,7 @@ function updateImages(cBoard) {
     }
 }
 
-function checkDirection(i, j, pieceObj, change_i, change_j) {
+function checkDirection(i, j, pieceObj, change_i, change_j, infinite) {
 	var new_i = parseInt(i) + parseInt(change_i)
 	var new_j = parseInt(j) + parseInt(change_j)
 	console.log(`new i : ${new_i} new j : ${new_j}`)
@@ -225,7 +225,9 @@ function checkDirection(i, j, pieceObj, change_i, change_j) {
 	if (obstaclePiece instanceof Empty) {	// If empty
 		posVar = posToValue(new_i, new_j)
 		chessBoard.dotsList.push(posVar)
-		checkDirection(new_i, new_j, pieceObj, change_i, change_j)
+        if (infinite) {
+            checkDirection(new_i, new_j, pieceObj, change_i, change_j, infinite)
+        }
 	}
 
 	// Not empty, so check if same side
@@ -340,10 +342,10 @@ function checkStraight(i, j, pieceObj) {
 }
 
 function checkDiagonal(i, j, pieceObj) {
-	checkDirection(i, j, pieceObj, -1, -1) // Check left up
-	checkDirection(i, j, pieceObj, -1, +1) // Check right up
-	checkDirection(i, j, pieceObj, +1, -1) // Check left down
-	checkDirection(i, j, pieceObj, +1, +1) // Check right down
+	checkDirection(i, j, pieceObj, -1, -1, true) // Check left up
+	checkDirection(i, j, pieceObj, -1, +1, true) // Check right up
+	checkDirection(i, j, pieceObj, +1, -1, true) // Check left down
+	checkDirection(i, j, pieceObj, +1, +1, true) // Check right down
 }
 
 function calcMoves(i, j) {
@@ -363,6 +365,30 @@ function calcMoves(i, j) {
 		checkStraight(i, j, pieceObj)
 		checkDiagonal(i, j, pieceObj)
 	}
+    // King move logic
+    if (pieceObj instanceof King) {
+        checkDirection(i, j, pieceObj, -1, -1, false) // Check left up
+        checkDirection(i, j, pieceObj, -1, +1, false) // Check right up
+        checkDirection(i, j, pieceObj, +1, -1, false) // Check left down
+        checkDirection(i, j, pieceObj, +1, +1, false) // Check right down
+
+        checkDirection(i, j, pieceObj, 0, -1, false) // Check left
+        checkDirection(i, j, pieceObj, 0, +1, false) // Check right
+        checkDirection(i, j, pieceObj, +1, 0, false) // Check up
+        checkDirection(i, j, pieceObj, -1, 0, false) // Check down
+    }
+    // Knight move logic
+    if (pieceObj instanceof Knight) {
+        checkDirection(i, j, pieceObj, -2, -1, false) // Check up left
+        checkDirection(i, j, pieceObj, -2, +1, false) // Check up right
+        checkDirection(i, j, pieceObj, -1, -2, false) // Check left up 
+        checkDirection(i, j, pieceObj, -1, +2, false) // Check right up
+        
+        checkDirection(i, j, pieceObj, +1, -2, false) // Check left down
+        checkDirection(i, j, pieceObj, +1, +2, false) // Check right down
+        checkDirection(i, j, pieceObj, +2, -1, false) // Check down left
+        checkDirection(i, j, pieceObj, +2, +1, false) // Check down right
+    }
 }
 
 function clickedCell(cellID, chess) {
