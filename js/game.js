@@ -25,6 +25,7 @@ class Pawn extends Piece {
         super(ifWhite)
 
         this.name = "Pawn"
+        this.firstMove = true
 
         if (ifWhite) {
             this.imgSrc = "./img/w_pawn.png"
@@ -348,6 +349,42 @@ function checkDiagonal(i, j, pieceObj) {
 	checkDirection(i, j, pieceObj, +1, +1, true) // Check right down
 }
 
+function checkPawnDirection(i, j, pieceObj) {   // Check pawn avaliable moves
+    // Check move stright (cannot eat things in front)
+    if (pieceObj.side) {    // Is white (go up)
+        new_i = i - 1
+        new_new_i = new_i - 1
+    }
+    else {  // Is black (go down)
+        new_i = i + 1
+        new_new_i = new_i + 1
+    }
+    // Check if valid new_i    
+    if (new_i < 0 || new_i > 7) {
+        return true
+    }
+
+    aimCell = chessBoard.board[new_i][j]
+    if (aimCell instanceof Empty) { // if no piece in front
+        posVar = posToValue(new_i, j)
+        chessBoard.dotsList.push(posVar)
+
+        if (pieceObj.firstMove) {   // First move? (can move 2 cells)
+            // Check if valid new_new_i
+            if (new_new_i < 0 || new_new_i > 7) {
+                return true
+            }
+
+            new_aimCell = chessBoard.board[new_new_i][j]
+            if (new_aimCell instanceof Empty) {
+                posVar = posToValue(new_new_i, j)
+                chessBoard.dotsList.push(posVar)
+            }
+        }
+    }
+
+}
+
 function calcMoves(i, j) {
     console.log(`Calculating move ${i} ${j}`)
     var pieceObj = chessBoard.board[i][j]
@@ -389,6 +426,10 @@ function calcMoves(i, j) {
         checkDirection(i, j, pieceObj, +2, -1, false) // Check down left
         checkDirection(i, j, pieceObj, +2, +1, false) // Check down right
     }
+    // Pawn move logic
+    if (pieceObj instanceof Pawn) {
+       checkPawnDirection(i, j, pieceObj) 
+    }
 }
 
 function clickedCell(cellID, chess) {
@@ -420,19 +461,35 @@ function clickedCell(cellID, chess) {
             // chess.ifSelected = false
             // document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
         }
-        else {  // move piece if not same side
+        else {  // eat piece if not same side
             var old_i = chess.selectedCell[0]
             var old_j = chess.selectedCell[1]
 
-            const replacedPiece = chess.board[i][j] // For win checking (not implemented yet)
+            // Change Pawn first move
+            if (chess.board[old_i][old_j] instanceof Pawn) {
+                chess.board[old_i][old_j].firstMove = false
+                console.log("changed")
+            }
+
+            const replacedPiece = chess.board[i][j] // For win checking
             chess.board[i][j] = chess.board[old_i][old_j]
             chess.board[old_i][old_j] = new Empty()
 
             chess.selectedCell = [10, 10]
             chess.ifSelected = false
 
-            document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
             chess.dotsList = []
+            document.getElementById(`${old_i}_${old_j}`).classList.remove('highlighted')
+
+            // Checking for win
+            if (replacedPiece instanceof King) {
+                if (replacedPiece.side) {   // White king got ate
+                    alert("Black side won!")
+                }
+                else {  // Black king got ate
+                    alert("White side won!")
+                }
+            }
         }
     }
     else if (chess.board[i][j] instanceof Empty == false) {  // Highlight cell
