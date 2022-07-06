@@ -350,6 +350,8 @@ function checkDiagonal(i, j, pieceObj) {
 }
 
 function checkPawnDirection(i, j, pieceObj) {   // Check pawn avaliable moves
+    i = parseInt(i)
+    j = parseInt(j)
     // Check move stright (cannot eat things in front)
     if (pieceObj.side) {    // Is white (go up)
         new_i = i - 1
@@ -363,6 +365,7 @@ function checkPawnDirection(i, j, pieceObj) {   // Check pawn avaliable moves
     if (new_i < 0 || new_i > 7) {
         return true
     }
+
 
     aimCell = chessBoard.board[new_i][j]
     if (aimCell instanceof Empty) { // if no piece in front
