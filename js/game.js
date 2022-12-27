@@ -388,6 +388,46 @@ function checkPawnDirection(i, j, pieceObj) {   // Check pawn avaliable moves
 
 }
 
+function checkPawnEatable(i, j, pieceObj) {
+	// Stop if out of bound
+	if (i < 0 || i > 7 || j < 0 || j > 7) {
+		return true
+	}
+
+	// Check obstacle piece
+	var obstaclePiece = chessBoard.board[i][j]
+    if (obstaclePiece instanceof Empty) {
+        return true
+    }
+    if (obstaclePiece.side == pieceObj.side) {
+        return true
+    } 
+
+    posVar = posToValue(i, j)
+    chessBoard.dotsList.push(posVar)
+    
+}
+
+function checkPawnEatDirection(i, j, pieceObj) {
+    i = parseInt(i)
+    j = parseInt(j)
+
+    new_j1 = j - 1
+    new_j2 = j + 1
+
+    if (pieceObj.side) {    // if is white (go up)
+        new_i = i - 1
+    }
+    else {
+        new_i = i + 1
+    }
+
+    checkPawnEatable(new_i, new_j1, pieceObj)
+    checkPawnEatable(new_i, new_j2, pieceObj)
+
+
+}
+
 function calcMoves(i, j) {
     console.log(`Calculating move ${i} ${j}`)
     var pieceObj = chessBoard.board[i][j]
@@ -432,6 +472,7 @@ function calcMoves(i, j) {
     // Pawn move logic
     if (pieceObj instanceof Pawn) {
        checkPawnDirection(i, j, pieceObj) 
+       checkPawnEatDirection(i, j, pieceObj)
     }
 }
 
