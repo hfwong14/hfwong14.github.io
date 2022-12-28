@@ -166,6 +166,7 @@ class Board {
         this.ifSelected = false
         this.selectedCell = [10, 10]
         this.dotsList = []
+        this.lastSide = -1
         
     }
 
@@ -495,6 +496,10 @@ function clickedCell(cellID, chess) {
             document.getElementById(`${i}_${j}`).classList.remove('highlighted')
             chess.dotsList = []
         }
+        else if (!chess.dotsList.includes(posToValue(i, j))) {  // cannot be moved to the cell
+            alert("Cannot move to this cell.")
+        }
+
         else if (chessBoard.board[old_i][old_j].side == chess.board[i][j].side) {  // alert if both piece on the same side
 
             console.log("Cannot eat same side")
@@ -514,6 +519,9 @@ function clickedCell(cellID, chess) {
                 chess.board[old_i][old_j].firstMove = false
                 console.log("changed")
             }
+
+            // Change chessBoard last moved side
+            chess.lastSide = chess.board[old_i][old_j].side
 
             const replacedPiece = chess.board[i][j] // For win checking
             chess.board[i][j] = chess.board[old_i][old_j]
@@ -536,7 +544,10 @@ function clickedCell(cellID, chess) {
             }
         }
     }
-    else if (chess.board[i][j] instanceof Empty == false) {  // Highlight cell
+    else if (chess.board[i][j].side == chess.lastSide) {    //  try to highlight same side again
+        alert("It is the other's turn.")
+    }
+    else if (chess.board[i][j] instanceof Empty == false) {  // Highlight cell if isn't Empty
         console.log(`Selected ${i} ${j}`)
         chess.selectedCell = coords
         chess.ifSelected = true
