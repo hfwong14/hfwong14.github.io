@@ -21,7 +21,12 @@ function hubMain() {
         var tempElement = document.createElement("div");
         tempElement.classList.add("projects");
         tempElement.id = curProject.name;
-        tempElement.innerText = curProject.name;
+
+        var tempText = document.createElement("a");
+        tempText.href = curProject.link;
+        tempText.innerText = curProject.name;
+        tempElement.appendChild(tempText);
+
         projectBrowser.appendChild(tempElement);
     }
 
