@@ -1,4 +1,3 @@
-
 body {
     background-color: black;
     margin: 0;
@@ -7,49 +6,42 @@ body {
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 }
 
-#gameBoard {
-    background-color: rgb(181, 181, 181);
+.whiteText {
+    color: white;
+}
+
+#projectBrowser {
+    height: 100vh;
+    width: 400px;
 
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-
-    width: 100vmin;
-    height: 100vmin;
-    
-    user-select: none;
 }
 
-.cellBlock {
-    display: table-cell;
+#huhBigTitle {
+    border: 1px solid;
+    border-color: red;
+
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+
     text-align: center;
-    position: relative;
+    vertical-align: middle;
 }
 
-.grayBlock {
-    background-color: rgb(128, 128, 128);
+#hubBigTitleText {
+    font-size: 70px;
 }
 
-.highlighted {
-    background-color: red;
+.projects {
+    height: 200px;
+    width: 100%;
+    border: 1px solid;
+    border-color: red;
+
+    font-size: 50px;
 }
 
-.pieceImg {
-    /* width: 95%;
-    height: 95%; */
-    
-    margin-top: 10%;
-    width: 75%;
-    height: 75%;
-}
-
-.dot {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: calc((100vmin / 8) - 3px);
-    height: calc((100vmin / 8) - 3px);
-}
