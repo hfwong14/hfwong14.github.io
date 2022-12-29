@@ -30,7 +30,7 @@ function hubMain() {
         var tempElement = document.createElement("div");
         tempElement.classList.add("projects");
         tempElement.id = curProject.link;
-        tempElement.style.backgroundImage = "url('img/chessBG.png');";
+        tempElement.style.backgroundImage = "url('./img/chessBG.png');";
 
         var tempText = document.createElement("p");
         // tempText.href = curProject.link;

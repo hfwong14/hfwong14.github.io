@@ -60,11 +60,7 @@ body {
     align-items: center;
 
     font-size: 50px;
-    /* background-color: white; */
-    background-image: url("chessBG.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .projectName {
