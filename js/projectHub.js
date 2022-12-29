@@ -6,6 +6,11 @@ class Project {
     }
 }
 
+function clickedCell(aLink) {
+    alert(link);
+    alert("HES");
+}
+
 function hubMain() {
     var projectBrowser = document.getElementById("projectBrowser");
     console.log(projectBrowser);
@@ -23,12 +28,15 @@ function hubMain() {
         var curProject = projectsList[i];
         var tempElement = document.createElement("div");
         tempElement.classList.add("projects");
-        tempElement.id = curProject.name;
+        tempElement.id = curProject.link;
 
-        var tempText = document.createElement("a");
-        tempText.href = curProject.link;
+        var tempText = document.createElement("p");
+        // tempText.href = curProject.link;
         tempText.innerText = curProject.name;
+        tempText.classList.add("projectName");
         tempElement.appendChild(tempText);
+
+        tempElement.addEventListener("click", function() {location.assign(this.id)}, false);
 
         projectBrowser.appendChild(tempElement);
     }
