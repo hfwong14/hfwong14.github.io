@@ -18,12 +18,14 @@ body {
     width: 500px;
 
     display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, 4fr);
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 #huhBigTitle {
-    height: 250px;
+    height: 5000px;
     border: 1px solid;
     border-color: red;
 
@@ -61,4 +63,6 @@ body {
 
 .projectName {
     color: aqua;
+
+    text-align: center;
 }
