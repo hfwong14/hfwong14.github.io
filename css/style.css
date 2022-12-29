@@ -1,70 +1,55 @@
+
 body {
-    /* background-color: black; */
+    background-color: black;
     margin: 0;
     height: 100vh;
     width: 100vw;
 
     display: flex;
     justify-content: center;
-    /* align-items: center; */
-    background-position: center;
+    align-items: center;
 }
 
-.whiteText {
-    color: white;
-}
-
-#projectBrowser {
-    height: 100vh;
-    width: 500px;
+#gameBoard {
+    background-color: rgb(181, 181, 181);
 
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: repeat(3, 4fr);
-    overflow-x: hidden;
-    overflow-y: hidden;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+
+    width: 100vmin;
+    height: 100vmin;
+    
+    user-select: none;
 }
 
-#huhBigTitle {
-    height: 5000px;
-    border: 1px solid;
-    border-color: red;
-
-    padding-bottom: 50px;
-
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
-}
-
-#hubBigTitleText {
-    font-size: 70px;
+.cellBlock {
+    display: table-cell;
     text-align: center;
-    vertical-align: middle;
-    text-decoration: underline white 10px;
+    position: relative;
 }
 
-.projects {
-    height: 200px;
-    /* width: 100%; */
-    border: 1px solid aqua;
-
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-
-    margin-right: 15px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 50px;
-    background-color: rgba(0, 0, 0, 0.5);
+.grayBlock {
+    background-color: rgb(128, 128, 128);
 }
 
-.projectName {
-    color: aqua;
+.highlighted {
+    background-color: red;
+}
 
-    text-align: center;
+.pieceImg {
+    /* width: 95%;
+    height: 95%; */
+    
+    margin-top: 10%;
+    width: 75%;
+    height: 75%;
+}
+
+.dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc((100vmin / 8) - 3px);
+    height: calc((100vmin / 8) - 3px);
 }
