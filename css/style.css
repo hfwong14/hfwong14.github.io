@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    /* background-color: black; */
     margin: 0;
     height: 100vh;
     width: 100vw;
@@ -7,6 +7,7 @@ body {
     display: flex;
     justify-content: center;
     /* align-items: center; */
+    background-position: center;
 }
 
 .whiteText {
@@ -21,7 +22,7 @@ body {
     grid-template-columns: 100%;
     grid-template-rows: repeat(3, 4fr);
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 #huhBigTitle {
@@ -59,6 +60,11 @@ body {
     align-items: center;
 
     font-size: 50px;
+    /* background-color: white; */
+    background-image: url("chessBG.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .projectName {

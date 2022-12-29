@@ -1,8 +1,9 @@
 
 class Project {
-    constructor(aName, aLink) {
+    constructor(aName, aLink, aImg) {
         this.name = aName;
         this.link = aLink;
+        this.img = aImg;
     }
 }
 
@@ -17,7 +18,7 @@ function hubMain() {
 
     var projectsList = [];
     
-    const chessGame = new Project("Chess Game", "./projects/chess2.0/chess.html");
+    const chessGame = new Project("Chess Game", "./projects/chess2.0/chess.html", "img/chessBG.png");
     projectsList.push(chessGame);
     const foodRandomizer = new Project("Food Randomizer", "./projects/foodRandomizer/foodRandomizer.html");
     projectsList.push(foodRandomizer);
@@ -29,6 +30,7 @@ function hubMain() {
         var tempElement = document.createElement("div");
         tempElement.classList.add("projects");
         tempElement.id = curProject.link;
+        tempElement.style.backgroundImage = "url('img/chessBG.png');";
 
         var tempText = document.createElement("p");
         // tempText.href = curProject.link;
