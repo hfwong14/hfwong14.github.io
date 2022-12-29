@@ -14,6 +14,9 @@ function hubMain() {
     
     const chessGame = new Project("Chess Game", "./projects/chess2.0/chess.html");
     projectsList.push(chessGame);
+    const foodRandomizer = new Project("Food Randomizer", "./projects/foodRandomizer/foodRandomizer.html");
+    projectsList.push(foodRandomizer);
+    // projectsList.push(foodRandomizer);
 
     // Add projects to list
     for (var i = 0; i < projectsList.length; i++) {
